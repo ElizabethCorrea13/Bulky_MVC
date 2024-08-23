@@ -1,8 +1,8 @@
-﻿using BulkyWeb.Data;
-using BulkyWeb.Models;
+﻿using Bulky.DataAcces.Data;
+using Bulky.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BulkyWeb.Controllers
+namespace Bulky.DataAcces.Controllers
 {
     public class CategoryController : Controller
     {

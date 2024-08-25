@@ -1,7 +1,10 @@
-﻿using Bulky.DataAccess.Repository.IRepository;
+﻿using Bulky.DataAcces.Data;
+using Bulky.DataAccess.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,29 +12,42 @@ namespace Bulky.DataAccess.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        public void Add(T entity)
+        private readonly ApplicationDbContext _db;
+        internal DbSet<T> dbSet;
+        public Repository(ApplicationDbContext db)
         {
-            throw new NotImplementedException();
+            _db = db;
+            //asi puede ser generica
+            this.dbSet = _db.Set<T>();
+            //_db.Categories == dbSet
         }
 
-        public T Get(System.Linq.Expressions.Expression<Func<T, bool>> filter)
+        public void Add(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Add(entity);
+        }
+
+        public T Get(Expression<Func<T, bool>> filter)
+        {
+            IQueryable<T> query = dbSet;
+            query=query.Where(filter);
+            return query.FirstOrDefault();
         }
 
         public IEnumerable<T> GetAll()
         {
-            throw new NotImplementedException();
+            IQueryable<T> query = dbSet;
+            return query.ToList();
         }
 
         public void Remove(T entity)
         {
-            throw new NotImplementedException();
+            dbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entity)
         {
-            throw new NotImplementedException();
+            dbSet.RemoveRange(entity);
         }
     }
 }
